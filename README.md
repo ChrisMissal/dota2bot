@@ -18,7 +18,7 @@ To anyone who've found this or is using it, if you have any feedback in improvin
             - Download the files on this repo by going to `<> Code` and Under `Local`, select `Download ZIP`.
             - Extract the contents of the zip inside the `bots` folder.
             - Alternatively, if you have Git installed (ignore 2-3 from above):
-                - Open Command Prompt inside the folder (Right Click on Windows 11). Type: `git clone https://github.com/ryndrb/dota2bot.git`.
+                - Open Command Prompt inside the folder (Right Click on Windows 11). Type: `git clone https://github.com/ryndrb/dota2bot.git .`.
                 - The contents of this repository will then be downloaded. And everytime this repository is updated, open Command Prompt inside the `bots` folder. Type: `git pull` to update the files inside the folder.
         - Then, launch DotA 2.
         - Click `Play Dota`. Under `Custom Lobbies`, select `Create`.
