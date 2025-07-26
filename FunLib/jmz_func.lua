@@ -9,6 +9,7 @@
 
 
 local J = {}
+local Log = require( GetScriptDirectory().."/FunLib/decision_log" )
 
 
 local sDota2Version= '7.33'
@@ -2056,6 +2057,9 @@ end
 
 
 function J.SetReportMotive( bDebugFile, sMotive )
+    if sMotive ~= nil then
+        Log.Log(GetBot(), sMotive)
+    end
 
 	if bDebugMode and bDebugFile and sMotive ~= nil
 	then

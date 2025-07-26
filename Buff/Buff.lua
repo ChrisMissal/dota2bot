@@ -19,6 +19,11 @@ local botTable = {
     [DOTA_TEAM_BADGUYS]     = {}
 }
 
+-- simple logger helper
+local function LogMessage(msg)
+    GameRules:SendCustomMessage("[Buff] " .. msg, 0, 0)
+end
+
 function Buff:AddBotsToTable()
     -- with 7.38, player IDs are not 9<= anymore; when no human on either side
     -- 2 rad, 3 dire
@@ -88,6 +93,10 @@ end
 
 local BotCount = 0
 local SelectedHeroCount = 0
+-- used to avoid spamming log messages
+local towersLogged = {[DOTA_TEAM_GOODGUYS] = false, [DOTA_TEAM_BADGUYS] = false}
+local heroGoldLogged = {}
+local heroXPLogged = {}
 local function CheckBotCount()
     BotCount = 0
     SelectedHeroCount = 0
@@ -126,6 +135,12 @@ local bBuffFlags = {
     xpm = {
         radiant = true, -- Set to 'false' to disable Radiant bots receiving an Experience boost.
         dire    = true, -- Set to 'false' to disable Dire bots receiving an Experience boost.
+    },
+    -- Logging configuration
+    log = {
+        towers = true,  -- Set to 'false' to disable tower buff log messages.
+        gpm    = true,  -- Set to 'false' to disable GPM buff log messages.
+        xpm    = true,  -- Set to 'false' to disable XPM buff log messages.
     },
 }
 
@@ -171,9 +186,17 @@ function Buff:Init()
         if GameRules:GetDOTATime(false, false) > 0 then
             -- Towers
             if bBuffFlags.towers.radiant then
+                if bBuffFlags.log.towers and not towersLogged[DOTA_TEAM_GOODGUYS] then
+                    LogMessage('Radiant tower buff active')
+                    towersLogged[DOTA_TEAM_GOODGUYS] = true
+                end
                 T.HandleTowerBuff(DOTA_TEAM_GOODGUYS)
             end
             if bBuffFlags.towers.dire then
+                if bBuffFlags.log.towers and not towersLogged[DOTA_TEAM_BADGUYS] then
+                    LogMessage('Dire tower buff active')
+                    towersLogged[DOTA_TEAM_BADGUYS] = true
+                end
                 T.HandleTowerBuff(DOTA_TEAM_BADGUYS)
             end
 
@@ -196,18 +219,34 @@ function Buff:Init()
             if not Helper.IsTurboMode() then
                 for _, h in pairs(TeamRadiant) do
                     if bBuffFlags.gpm.radiant then
+                        if bBuffFlags.log.gpm and not heroGoldLogged[h:entindex()] then
+                            LogMessage('GPM buff active for '..string.gsub(h:GetUnitName(), 'npc_dota_hero_', ''))
+                            heroGoldLogged[h:entindex()] = true
+                        end
                         GPM.UpdateBotGold(h, TeamRadiant)
                     end
                     if bBuffFlags.xpm.radiant then
+                        if bBuffFlags.log.xpm and not heroXPLogged[h:entindex()] then
+                            LogMessage('XPM buff active for '..string.gsub(h:GetUnitName(), 'npc_dota_hero_', ''))
+                            heroXPLogged[h:entindex()] = true
+                        end
                         XP.UpdateXP(h, TeamRadiant)
                     end
                 end
 
                 for _, h in pairs(TeamDire) do
                     if bBuffFlags.gpm.dire then
+                        if bBuffFlags.log.gpm and not heroGoldLogged[h:entindex()] then
+                            LogMessage('GPM buff active for '..string.gsub(h:GetUnitName(), 'npc_dota_hero_', ''))
+                            heroGoldLogged[h:entindex()] = true
+                        end
                         GPM.UpdateBotGold(h, TeamDire)
                     end
                     if bBuffFlags.xpm.dire then
+                        if bBuffFlags.log.xpm and not heroXPLogged[h:entindex()] then
+                            LogMessage('XPM buff active for '..string.gsub(h:GetUnitName(), 'npc_dota_hero_', ''))
+                            heroXPLogged[h:entindex()] = true
+                        end
                         XP.UpdateXP(h, TeamDire)
                     end
                 end
