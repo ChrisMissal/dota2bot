@@ -1,5 +1,6 @@
 local bot = GetBot()
 local J = require( GetScriptDirectory()..'/FunLib/jmz_func')
+local AIBackend = require( GetScriptDirectory()..'/AIBackend/bridge')
 
 local clearMode = false
 local botName = bot:GetUnitName()
@@ -212,6 +213,9 @@ end
 local fNextMovementTime = 0
 function Think()
 	if J.CanNotUseAction(bot) then
+		return
+	end
+	if AIBackend.Think(bot) then
 		return
 	end
 

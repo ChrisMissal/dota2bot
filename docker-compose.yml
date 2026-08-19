@@ -1,0 +1,10 @@
+services:
+  ai-backend:
+    build:
+      context: ./backend
+    environment:
+      AI_WORKER_COUNT: "1"
+      AI_POLICY_MODE: "none"
+      AI_REQUEST_TIMEOUT_SECONDS: "0.08"
+    ports:
+      - "8765:8765"

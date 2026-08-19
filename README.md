@@ -45,6 +45,17 @@ If you’ve come across this script or is using it, good feedback is always welc
     - BOT Experiment (by Furiouspuppy)
     - ExtremePush (https://github.com/insraq/dota2bots)
 
+- ***Optional External AI Backend***
+    - This repo includes an experimental localhost AI bridge. Lua remains the in-game executor, while an optional Docker backend can make high-level movement and attack decisions.
+    - The bridge is configured in `AIBackend/config.lua`. It is enabled for player ID `0` by default; add IDs `0` through `9` to `controlled_player_ids` to control more bots.
+    - Start the sample backend from this folder:
+      ```powershell
+      docker compose up --build
+      ```
+    - The backend listens on `http://127.0.0.1:8765`. With `AI_POLICY_MODE=none`, every decision is `none` and the existing Lua scripts keep full control. For quick smoke tests, set `AI_POLICY_MODE=attack_nearest_enemy` or `AI_POLICY_MODE=move_forward`.
+    - Scale worker processes by changing `AI_WORKER_COUNT` in `docker-compose.yml`, up to `10`. Requests are routed by bot player ID, so each bot can be handled independently.
+    - If the backend is stopped, times out, or returns an invalid action, the bot falls back to the existing Lua mode logic.
+
 - ***Heroes (Pos: 1,2,3,4,5)***
     - <ins>Heroes Implemented Count:</ins> **127** / 127
     - Bugged (due to Valve; some can be relatively weak)

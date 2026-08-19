@@ -1,4 +1,5 @@
 local J = require(GetScriptDirectory()..'/FunLib/jmz_func')
+local AIBackend = require(GetScriptDirectory()..'/AIBackend/bridge')
 local X = {}
 
 local bot = GetBot()
@@ -352,6 +353,7 @@ end
 
 function Think()
     if J.CanNotUseAction(bot) then return end
+    if AIBackend.Think(bot) then return end
 
     local nEnemyHeroes = bot:GetNearbyHeroes(1600, true, BOT_MODE_NONE)
     local nEnemyTowers = bot:GetNearbyTowers(1600, true)

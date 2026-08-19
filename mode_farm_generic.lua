@@ -5,6 +5,7 @@ end
 local bot = GetBot();
 local X = {}
 local J = require( GetScriptDirectory()..'/FunLib/jmz_func')
+local AIBackend = require( GetScriptDirectory()..'/AIBackend/bridge')
 
 local botName = bot:GetUnitName()
 local minute = 0
@@ -274,6 +275,7 @@ end
 
 function Think()
 	if J.CanNotUseAction(bot) then return end
+	if AIBackend.Think(bot) then return end
 
 	local botAttackRange = bot:GetAttackRange()
 	local StaticRemnant = bot:GetAbilityByName('storm_spirit_static_remnant')
